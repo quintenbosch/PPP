@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     var mySecondCar = MySecondCars("Mercedes", 2000)
 
     mySecondCar.name = "Opel"
-    mySecondCar.model = 2010
+    //mySecondCar.model = 2010
 
     println("My car's name is ${mySecondCar.name} and its model is ${mySecondCar.model}")
 
