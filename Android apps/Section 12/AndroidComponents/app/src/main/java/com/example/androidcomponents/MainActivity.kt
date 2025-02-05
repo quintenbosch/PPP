@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -92,6 +95,10 @@ fun Components() {
         mutableStateOf("Result")
     }
 
+    val myImage = remember {
+        mutableStateOf(R.drawable.boat)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,6 +106,16 @@ fun Components() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Image(
+            painter = painterResource(id = myImage.value),
+            contentDescription = "First Image",
+            modifier = Modifier.size(300.dp),
+            contentScale = ContentScale.Fit,
+            alignment = Alignment.Center
+        )
+
+        Spacer(modifier = Modifier.size(30.dp))
+
         if (buttonsStatus.value) {
             Text(
                 text = myText.value,
@@ -121,6 +138,8 @@ fun Components() {
                     myText.value = "Hello Compose"
                     myTextColor.value = Color.White
 
+                    myImage.value = R.drawable.second_image
+
                     buttonsStatus.value = false
                 } else {
                     myButtonBackgroundColor.value = Color.Black
@@ -128,6 +147,8 @@ fun Components() {
                     myButtonTextColor.value = Color.White
                     myText.value = "Hello World"
                     myTextColor.value = Color.Black
+
+                    myImage.value = R.drawable.boat
 
                     buttonsStatus.value = true
                 }
@@ -161,7 +182,7 @@ fun Components() {
             maxLines = 4,
             //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             //visualTransformation = PasswordVisualTransformation()
-            )
+        )
 
         Spacer(modifier = Modifier.size(30.dp))
 
