@@ -119,8 +119,9 @@ fun MainPage(navController: NavController) {
 
                 Button(
                     onClick = {
-                        navController.navigate("Secondpage") {
+                        navController.navigate("Secondpage/${userName.value}/${userAge.value}") {
                             //popUpTo("MainPage") {inclusive = true} -> removes first page from stack
+
                         }
                     },
                     colors = ButtonDefaults.buttonColors(

@@ -38,7 +38,7 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondPage(navController: NavController) {
+fun SecondPage(navController: NavController, name : String, age : Int) {
     val userName = remember {
         mutableStateOf("")
     }
@@ -77,7 +77,7 @@ fun SecondPage(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Name",
+                    text = "Name: $name",
                     color = Color.Black,
                     fontSize = 20.sp
                 )
@@ -85,7 +85,7 @@ fun SecondPage(navController: NavController) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Age",
+                    text = "Age: $age",
                     color = Color.Black,
                     fontSize = 20.sp
                 )
