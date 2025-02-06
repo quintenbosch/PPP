@@ -1,5 +1,6 @@
 package com.example.navigationexample
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +46,8 @@ fun MainPage(navController: NavController) {
     val userAge = remember {
         mutableStateOf("")
     }
+
+    val myContext = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -119,9 +123,18 @@ fun MainPage(navController: NavController) {
 
                 Button(
                     onClick = {
-                        navController.navigate("Secondpage/${userName.value}/${userAge.value}") {
-                            //popUpTo("MainPage") {inclusive = true} -> removes first page from stack
-
+                        if (userName.value.isEmpty() || userAge.value.isEmpty()) {
+                            Toast.makeText(myContext, "Please enter all data", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            try {
+                                navController.navigate("Secondpage/${userName.value}/${userAge.value}") {
+                                    //popUpTo("MainPage") {inclusive = true} -> removes first page from stack
+                                }
+                            } catch (e : IllegalArgumentException) {
+                                Toast.makeText(myContext, "Please enter valid data", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
