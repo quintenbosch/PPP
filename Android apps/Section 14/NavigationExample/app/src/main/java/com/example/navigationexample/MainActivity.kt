@@ -10,7 +10,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.navigationexample.ui.theme.NavigationExampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,9 +24,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             NavigationExampleTheme {
                 Surface() {
-                    MainPage()
+                    MyNavigation()
                 }
             }
         }
     }
+}
+
+@Composable
+fun MyNavigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "MainPage") {
+        composable(route = "MainPage") {
+            MainPage(navController)
+        }
+
+        composable(route = "SecondPage") {
+            SecondPage(navController)
+        }
+    }
+
 }

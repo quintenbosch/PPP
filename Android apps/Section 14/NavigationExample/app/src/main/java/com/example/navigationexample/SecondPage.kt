@@ -34,10 +34,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondPage() {
+fun SecondPage(navController: NavController) {
     val userName = remember {
         mutableStateOf("")
     }
@@ -59,7 +60,7 @@ fun SecondPage() {
                 navigationIcon = {
                     IconButton(
                         onClick = {
-
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Arrow Back")

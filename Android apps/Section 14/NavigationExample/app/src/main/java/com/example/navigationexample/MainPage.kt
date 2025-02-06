@@ -32,10 +32,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPage() {
+fun MainPage(navController: NavController) {
     val userName = remember {
         mutableStateOf("")
     }
@@ -118,7 +119,9 @@ fun MainPage() {
 
                 Button(
                     onClick = {
-
+                        navController.navigate("Secondpage") {
+                            //popUpTo("MainPage") {inclusive = true} -> removes first page from stack
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
