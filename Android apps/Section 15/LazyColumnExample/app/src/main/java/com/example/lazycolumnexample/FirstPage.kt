@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -47,7 +48,10 @@ fun FirstPage(navController: NavController) {
 
     val myContext = LocalContext.current
 
+    val topBarBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(topBarBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = {
@@ -55,8 +59,10 @@ fun FirstPage(navController: NavController) {
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = colorResource(id = R.color.purple_500),
-                    titleContentColor = Color.White
+                    titleContentColor = Color.White,
+                    scrolledContainerColor = colorResource(id = R.color.purple_200)
                 ),
+                scrollBehavior = topBarBehavior
             )
         },
         content = {
@@ -69,7 +75,7 @@ fun FirstPage(navController: NavController) {
                         val country = countryList[index]
                         Card(
                             onClick = {
-                                Toast.makeText(myContext, "you selected the ${country.countryName}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(myContext, "you selected the ${country.countryName} flag", Toast.LENGTH_SHORT).show()
                             },
                             modifier = Modifier.fillMaxWidth().height(120.dp).padding(7.dp),
                             colors = CardDefaults.cardColors(
