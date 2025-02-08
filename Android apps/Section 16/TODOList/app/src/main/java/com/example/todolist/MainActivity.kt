@@ -1,6 +1,7 @@
 package com.example.todolist
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,6 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -64,13 +67,15 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainPage() {
+    val myContext = LocalContext.current
+
     val todoName = remember {
         mutableStateOf("")
     }
 
-    val itemList = remember {
-        mutableStateListOf("Learn Kotlin", "Learn Compose")
-    }
+    val itemList = readData(myContext)
+
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -106,7 +111,16 @@ fun MainPage() {
             )
             Spacer(modifier = Modifier.width(5.dp))
             Button(
-                onClick = {},
+                onClick = {
+                    if (todoName.value.isNotEmpty()) {
+                        itemList.add(todoName.value)
+                        writeData(itemList, myContext)
+                        todoName.value = ""
+                        focusManager.clearFocus()
+                    } else {
+                        Toast.makeText(myContext, "Please enter a TODO", Toast.LENGTH_SHORT).show()
+                    }
+                },
                 modifier = Modifier.weight(3F).height(60.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.green)
@@ -114,7 +128,7 @@ fun MainPage() {
                 shape = RoundedCornerShape(5.dp),
                 border = BorderStroke(1.dp, Color.Black)
                 ) {
-                Text(text = "Enter TODO", fontSize = 20.sp)
+                Text(text = "Add", fontSize = 20.sp)
             }
         }
         LazyColumn {
