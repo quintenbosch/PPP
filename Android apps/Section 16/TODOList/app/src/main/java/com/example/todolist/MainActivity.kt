@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -77,6 +80,14 @@ fun MainPage() {
 
     val focusManager = LocalFocusManager.current
 
+    val deleteDialogStatus = remember {
+        mutableStateOf(false)
+    }
+
+    val clickedItemIndex = remember {
+        mutableStateOf(0)
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -84,7 +95,8 @@ fun MainPage() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             TextField(
                 value = todoName.value,
                 onValueChange = {
@@ -121,13 +133,15 @@ fun MainPage() {
                         Toast.makeText(myContext, "Please enter a TODO", Toast.LENGTH_SHORT).show()
                     }
                 },
-                modifier = Modifier.weight(3F).height(60.dp),
+                modifier = Modifier
+                    .weight(3F)
+                    .height(60.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.green)
                 ),
                 shape = RoundedCornerShape(5.dp),
                 border = BorderStroke(1.dp, Color.Black)
-                ) {
+            ) {
                 Text(text = "Add", fontSize = 20.sp)
             }
         }
@@ -148,7 +162,9 @@ fun MainPage() {
                         shape = RoundedCornerShape(0.dp)
                     ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(10.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -162,14 +178,61 @@ fun MainPage() {
 
                             Row {
                                 IconButton(onClick = {}) {
-                                    Icon(Icons.Filled.Edit, contentDescription = "Edit", tint = Color.White)
+                                    Icon(
+                                        Icons.Filled.Edit,
+                                        contentDescription = "Edit",
+                                        tint = Color.White
+                                    )
                                 }
-                                IconButton(onClick = {}) {
-                                    Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = Color.White)
+                                IconButton(onClick = {
+                                    deleteDialogStatus.value = true
+                                    clickedItemIndex.value = index
+                                }) {
+                                    Icon(
+                                        Icons.Filled.Delete,
+                                        contentDescription = "Delete",
+                                        tint = Color.White
+                                    )
                                 }
                             }
 
                         }
+                    }
+                }
+            )
+        }
+        if (deleteDialogStatus.value == true) {
+            AlertDialog(
+                onDismissRequest = { deleteDialogStatus.value = false },
+                title = {
+                    Text(text = "Delete")
+                },
+                text = {
+                    Text(text = "Do you wanna delete this item from the list?")
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            itemList.removeAt(clickedItemIndex.value)
+                            writeData(itemList, myContext)
+                            deleteDialogStatus.value = false
+                            Toast.makeText(
+                                myContext,
+                                "Item is removed from the list.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    ) {
+                        Text(text = "YES")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            deleteDialogStatus.value = false
+                        }
+                    ) {
+                        Text(text = "NO")
                     }
                 }
             )
